@@ -13,15 +13,15 @@ describe('Shopping flow Tests', () => {
 
     it('TC-0005-Saving the card after logout', async () => {
         await MainPage.addBackpackToCard();
-        const itemsInCard = MainPage.checkItemcInCard();
+        const itemsInCard = MainPage.checkItemcInCart();
 
         await MainPage.checkNumberofBurgerMenuLinks(4);
         
-        MainPage.logout();
+        await MainPage.logout();
         await LoginPage.login('standard_user', 'secret_sauce');
 
         await MainPage.checkMainPageTitle('Products');
-        await expect(MainPage.checkItemcInCard()).toEqual(itemsInCard);
+        expect(await MainPage.checkItemcInCart()).toEqual(itemsInCard);
     });
 
     it('TC-0006-Sorting - Price (low to high)', async () => {
@@ -47,24 +47,22 @@ describe('Shopping flow Tests', () => {
     });
 
     it('TC-0008- Valid Checkout', async () => {
-        const initialItemsInCard = await MainPage.getItemsInCard();
+        const initialItemsInCart = await MainPage.getItemsInCart();
         const productName = await MainPage.getBackpackName();
         const produtPrice = await MainPage.getBackpackPrice();
         await MainPage.addBackpackToCard();
 
-        const newItemsInCart = await MainPage.getItemsInCard();
+        const newItemsInCart = await MainPage.getItemsInCart();
 
-        expect(newItemsInCart).toBe(initialItemsInCard + 1);
+        expect(newItemsInCart).toBe(initialItemsInCart + 1);
 
         await MainPage.openCart();
-
         expect(await CartPage.getTitleText()).toEqual('Your Cart');
         expect(await CartPage.getAddedProductName()).toEqual(productName);
 
         await CartPage.openCheckoutPage(); 
         expect(await CheckoutPage.isCheckoutPageDisplayed()).toBe(true);
         
-
         await CheckoutPage.fillInCheckoutForm("John", "Doe", "EU2034");
 
         expect(await Checkout2Page.getProductName()).toEqual(productName);

@@ -16,12 +16,8 @@ class CartPage extends Page {
     }
 
     async getTitleText() {
-        const titleElement = await this.title;
-        if (titleElement) {
-            return titleElement.getText();
-        } else {
-            return '';
-        }
+        return titleElement.getText();
+    
     }
     async getAddedProductName() {
         return await this.addedProductName.getText();
@@ -29,14 +25,8 @@ class CartPage extends Page {
 
     async openCheckoutPage() {
         const checkoutBtn = await this.checkoutBtn;
-        console.log("Checkout button:", checkoutBtn);
         await checkoutBtn.click();
-    }
-
-    
-    
-    
-    
+    }   
     
 }
 

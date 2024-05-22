@@ -1,6 +1,7 @@
 import { $ } from '@wdio/globals'
 import Page from './page.js';
 
+
 class Checkout2Page extends Page {
     get productName () {
         return $('.inventory_item_name');
@@ -21,7 +22,7 @@ class Checkout2Page extends Page {
     async getTotalPrices () {
         const text = await this.productTotalPrices.getText();
         const price = parseFloat(text.replace('Item total: $', ''));
-            return price;
+        return price;
     }
 
     async finishCheckout () {

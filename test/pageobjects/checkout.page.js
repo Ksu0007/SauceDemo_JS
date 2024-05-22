@@ -3,7 +3,6 @@ import Page from './page.js';
 
 class CheckoutPage extends Page {
 
-   
     get checkoutForm () {
         return $('.checkout_info');
     }

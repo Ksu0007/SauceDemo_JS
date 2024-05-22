@@ -2,14 +2,8 @@ import { $ } from '@wdio/globals'
 import Page from './page.js';
 import LoginPage from '../pageobjects/login.page.js';
 
-
-/**
- * sub page containing specific selectors and methods for a specific page
- */
 class MainPage extends Page {
-    /**
-     * define selectors using getter methods
-     */
+   
     get mainPageTitle () {
         return $('.title');
     }
@@ -42,7 +36,7 @@ class MainPage extends Page {
         return $('.product_sort_container');
     }
 
-    get itemInCard () {
+    get itemInCart () {
         return $('//span[@class="shopping_cart_badge"]');
     }
 
@@ -71,16 +65,13 @@ class MainPage extends Page {
     }
 
 
-
     async checkMainPageTitle (title) {
         await expect(this.mainPageTitle).toHaveTextContaining(title);
     }
 
     async checkNumberofBurgerMenuLinks (number) {
-        
         await this.burgerMenuBtn.click();
         const numberOfLinks = await this.burgerMenuLinks.length;
-        console.log(`Number of links in burger menu: ${numberOfLinks}`);
         await expect(numberOfLinks).toEqual(number);
     }
 
@@ -88,16 +79,16 @@ class MainPage extends Page {
         await this.logoutBtn.click();
     }
 
-    async addBackpackToCard () {
+    async addBackpackToCart () {
         await this.backpackAddToCartBtn.click();
     }
 
-    async checkItemcInCard () {
-        (await this.itemInCard).getValue;
+    async checkItemcInCart () {
+        (await this.itemInCart).getValue;
     }
 
-    async getItemsInCard () {
-        const cartBadgeElement = await this.itemInCard;
+    async getItemsInCart () {
+        const cartBadgeElement = await this.itemInCart;
         if(await cartBadgeElement.isDisplayed()) {
             const itemsCount = await cartBadgeElement.getText();
             return parseInt(itemsCount, 10);
@@ -145,29 +136,19 @@ class MainPage extends Page {
 
     async checkNamesSortedAlphabetically() {
         const productNames = await this.productNames.map(async (nameElem) => {
-            const nameText = await nameElem.getText();
-            console.log('Product name found:', nameText);
-            return nameText;
+            return await nameElem.getText();
         });
     
         const sortedNames = [...productNames].sort();
-        console.log('Original names:', productNames);
-        console.log('Sorted names:', sortedNames);
-    
         expect(productNames).toEqual(sortedNames);
     }
 
     async checkNamesSortedReverseAlphabetically() {
         const productNames = await this.productNames.map(async (nameElem) => {
-            const nameText = await nameElem.getText();
-            console.log('Product name found:', nameText);
-            return nameText;
+            return await nameElem.getText();
         });
     
         const sortedNames = [...productNames].sort().reverse();
-        console.log('Original names:', productNames);
-        console.log('Sorted names:', sortedNames);
-    
         expect(productNames).toEqual(sortedNames);
     }
     
@@ -191,7 +172,6 @@ class MainPage extends Page {
         await browser.switchToWindow(newWindow);
     
         const currentURL = await browser.getUrl();
-        console.log('Current URL:', currentURL);
         await expect(currentURL).toContain(expectedUrl);
     
         await browser.closeWindow();
@@ -210,9 +190,6 @@ class MainPage extends Page {
         await this.clickAndVerifyIcon(this.linkedin, 'https://www.linkedin.com/company/sauce-labs/');
     }
     
-    
-    
-
     
 }
 

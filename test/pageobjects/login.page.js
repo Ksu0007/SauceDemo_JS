@@ -1,13 +1,9 @@
 import { $ } from '@wdio/globals'
 import Page from './page.js';
 
-/**
- * sub page containing specific selectors and methods for a specific page
- */
+
 class LoginPage extends Page {
-    /**
-     * define selectors using getter methods
-     */
+    
     get inputUsername () {
         return $('#user-name');
     }
@@ -24,17 +20,14 @@ class LoginPage extends Page {
         return $('h3[data-test="error"]');
     }
 
-    get xIsconUsername () {
+    get xIconUsername () {
         return $('//*[@id="login_button_container"]/div/form/div[1]/svg');
     }
-    get xIconPass () {
+    get xIconPassword () {
         return $('//*[@id="login_button_container"]/div/form/div[2]/svg');
     }
 
-    /**
-     * a method to encapsule automation code to interact with the page
-     * e.g. to login using username and password
-     */
+   
     async login (username, password) {
         await this.inputUsername.setValue(username);
         await this.inputPassword.setValue(password);
@@ -53,7 +46,7 @@ class LoginPage extends Page {
     }
 
     async checkXiconUsrnameIsDisplayed () {
-        await expect(this.xIsconUsername).toBeDisplayed();
+        await expect(this.xIconUsername).toBeDisplayed();
     }
 
     async checkUsernameFieldHighlighting () {
@@ -66,7 +59,7 @@ class LoginPage extends Page {
     }
 
     async checkXiconPassIsDisplayed () {
-        await expect(this.xIsconPass).toBeDisplayed();
+        await expect(this.xIconPassword).toBeDisplayed();
     }
 
     async checkPasswordFieldHighlighting () {
@@ -84,11 +77,7 @@ class LoginPage extends Page {
         expect(currentURL).toEqual('https://www.saucedemo.com');
         
     }
-    
 
-    /**
-     * overwrite specific options to adapt it to page object
-     */
     open () {
         return super.open('');
     }

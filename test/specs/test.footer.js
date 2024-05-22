@@ -16,7 +16,7 @@ describe('Footer Tests', () => {
     });
 
     it('TC-0007 - Verify LinkedIn icon opens correct URL', async () => {
-        await MainPage.checkLinkedinIcon;
+        await MainPage.checkLinkedinIcon();
     });
 
 } )

@@ -1,8 +1,6 @@
 import LoginPage from '../pageobjects/login.page.js';
 import MainPage from '../pageobjects/main.page.js';
 
-
-
 describe ('Login Tests', () => {
     it('TC 0001 - login of the valid user with valid credentials', async () => {
         await LoginPage.open();
@@ -43,8 +41,6 @@ describe ('Login Tests', () => {
         await MainPage.checkNumberofBurgerMenuLinks(4);
 
         await MainPage.logout();
-        
-        //await LoginPage.loginPageIsDisplayed();
 
         await LoginPage.checkUsernameInoutIsEmpty();
         await LoginPage.checkPasswordInputIsEmpty();
