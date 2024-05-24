@@ -1,86 +1,83 @@
-import LoginPage from '../pageobjects/login.page.js';
-import MainPage from '../pageobjects/main.page.js';
-import CartPage from '../pageobjects/cart.page.js';
-import CheckoutPage from '../pageobjects/checkout.page.js';
-import Checkout2Page from '../pageobjects/checkout2.page.js';
-import Checkout3Page from '../pageobjects/checkout3.page.js';
+import loginPage from "../pageobjects/login.page.js";
+import mainPage from "../pageobjects/main.page.js";
+import cartPage from "../pageobjects/cart.page.js";
+import checkoutPage from "../pageobjects/checkout.page.js";
+import checkout2Page from "../pageobjects/checkout2.page.js";
+import checkout3Page from "../pageobjects/checkout3.page.js";
 
-describe('Shopping flow Tests', () => {
-    beforeEach(async () => {
-        await LoginPage.open();
-        await LoginPage.login('standard_user', 'secret_sauce');
-    });
+describe("Shopping flow Tests", () => {
+  beforeEach(async () => {
+    await loginPage.open();
+    await loginPage.login("standard_user", "secret_sauce");
+  });
 
-    it('TC-0005-Saving the card after logout', async () => {
-        await MainPage.addBackpackToCard();
-        const itemsInCard = MainPage.checkItemcInCart();
+  it("TC-0005-Saving the card after logout", async () => {
+    await mainPage.addBackpackToCard();
+    const itemsInCard = mainPage.checkItemcInCart();
 
-        await MainPage.checkNumberofBurgerMenuLinks(4);
-        
-        await MainPage.logout();
-        await LoginPage.login('standard_user', 'secret_sauce');
+    await mainPage.checkNumberofBurgerMenuLinks(4);
 
-        await MainPage.checkMainPageTitle('Products');
-        expect(await MainPage.checkItemcInCart()).toEqual(itemsInCard);
-    });
+    await mainPage.logout();
+    await loginPage.login("standard_user", "secret_sauce");
 
-    it('TC-0006-Sorting - Price (low to high)', async () => {
-        await MainPage.selectSortingOption('Price (low to high)');
-        await MainPage.checkPricesSortedLowToHigh();
+    await mainPage.checkMainPageTitle("Products");
+    expect(await mainPage.checkItemcInCart()).toEqual(itemsInCard);
+  });
 
-    });
+  it("TC-0006-Sorting - Price (low to high)", async () => {
+    await mainPage.selectSortingOption("Price (low to high)");
+    await mainPage.checkPricesSortedLowToHigh();
+  });
 
-    it('TC-0006-Sorting - Price (high to low)', async () => {
-        await MainPage.selectSortingOption('Price (high to low)');
-        await MainPage.checkPricesSortedHighToLow();
+  it("TC-0006-Sorting - Price (high to low)", async () => {
+    await mainPage.selectSortingOption("Price (high to low)");
+    await mainPage.checkPricesSortedHighToLow();
+  });
 
-    });
+  it("TC-0006-Sorting - Name (A to Z)", async () => {
+    await mainPage.selectSortingOption("Name (A to Z)");
+    await mainPage.checkNamesSortedAlphabetically();
+  });
 
-    it('TC-0006-Sorting - Name (A to Z)', async () => {
-        await MainPage.selectSortingOption('Name (A to Z)');
-        await MainPage.checkNamesSortedAlphabetically();
-    });
+  it("TC-0006-Sorting - Name (Z to A)", async () => {
+    await mainPage.selectSortingOption("Name (Z to A)");
+    await mainPage.checkNamesSortedReverseAlphabetically();
+  });
 
-    it('TC-0006-Sorting - Name (Z to A)', async () => {
-        await MainPage.selectSortingOption('Name (Z to A)');
-        await MainPage.checkNamesSortedReverseAlphabetically();
-    });
+  it("TC-0008- Valid Checkout", async () => {
+    const initialItemsInCart = await mainPage.getItemsInCart();
+    const productName = await mainPage.getBackpackName();
+    const produtPrice = await mainPage.getBackpackPrice();
+    await mainPage.addBackpackToCard();
 
-    it('TC-0008- Valid Checkout', async () => {
-        const initialItemsInCart = await MainPage.getItemsInCart();
-        const productName = await MainPage.getBackpackName();
-        const produtPrice = await MainPage.getBackpackPrice();
-        await MainPage.addBackpackToCard();
+    const newItemsInCart = await mainPage.getItemsInCart();
 
-        const newItemsInCart = await MainPage.getItemsInCart();
+    expect(newItemsInCart).toBe(initialItemsInCart + 1);
 
-        expect(newItemsInCart).toBe(initialItemsInCart + 1);
+    await mainPage.openCart();
+    expect(await cartPage.getTitleText()).toEqual("Your Cart");
+    expect(await cartPage.getAddedProductName()).toEqual(productName);
 
-        await MainPage.openCart();
-        expect(await CartPage.getTitleText()).toEqual('Your Cart');
-        expect(await CartPage.getAddedProductName()).toEqual(productName);
+    await cartPage.openCheckoutPage();
+    expect(await checkoutPage.isCheckoutPageDisplayed()).toBe(true);
 
-        await CartPage.openCheckoutPage(); 
-        expect(await CheckoutPage.isCheckoutPageDisplayed()).toBe(true);
-        
-        await CheckoutPage.fillInCheckoutForm("John", "Doe", "EU2034");
+    await checkoutPage.fillInCheckoutForm("John", "Doe", "EU2034");
 
-        expect(await Checkout2Page.getProductName()).toEqual(productName);
-        expect(await Checkout2Page.getTotalPrices()).toEqual(produtPrice);
+    expect(await checkout2Page.getProductName()).toEqual(productName);
+    expect(await checkout2Page.getTotalPrices()).toEqual(produtPrice);
 
-        await Checkout2Page.finishCheckout();
+    await checkout2Page.finishCheckout();
 
-        expect(await Checkout3Page.isSuccessMsgDisplayed()).toBe(true);
+    expect(await checkout3Page.isSuccessMsgDisplayed()).toBe(true);
 
-        await Checkout3Page.returnHome();
+    await checkout3Page.returnHome();
 
-        expect(await MainPage.checkMainPageTitle('Products'));
+    expect(await mainPage.checkMainPageTitle("Products"));
+  });
 
-    });
-
-    it('TC-0009- Checkout without products', async () => {
-        await MainPage.openCart();
-        await CartPage.openCheckoutPage(); 
-        expect(await CheckoutPage.isCheckoutPageDisplayed()).toBe(false);
-    });
-})
+  it("TC-0009- Checkout without products", async () => {
+    await mainPage.openCart();
+    await cartPage.openCheckoutPage();
+    expect(await checkoutPage.isCheckoutPageDisplayed()).toBe(false);
+  });
+});

@@ -119,3 +119,5 @@ taqc-sprint-oop-fundamentals-Ksu0007/
 thread-js/
 wildrydes-site/
 
+node_modules
+.prettierrc
